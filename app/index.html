@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ES6 Promises</title>
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/google-code-prettify/styles/sunburst.css">
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>ES6 Promises</h1>
+        <p><a href="https://github.com/jennvoss/promises">https://github.com/jennvoss/promises</a></p>
+      </div>
+
+      <div class="row">
+        <h2>At its core, a Promise is an object with a .then() method</h2>
+        <p><code>.then</code> registers functions that handle the eventual value, or the failure to retrieve that value.</p>
+<pre>
+Promise { then: function, catch: function }
+</pre>
+        <p>Browser support: <a href="http://caniuse.com/#search=promise">http://caniuse.com/#search=promise</a></p>
+        <p>Promises are similar to event listeners, except:</p>
+        <ul>
+            <li>A promise can only succeed or fail once. It cannot succeed or fail twice, neither can it switch from success to failure or vice versa.</li>
+            <li>Event listeners must be subscribed to before the event is fired.</li>
+            <li>If a promise has succeeded or failed and you later add a success/failure callback, the correct callback will be called, even though the promise was returned earlier.</li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <h2>Promise usage in plain english</h2>
+        <p>A promise always takes a function with two arguments - the first for resolve, the second for reject</p>
+        <pre>
+Promise(function(resolve, reject) {
+  if ('your condition is met') {
+    resolve('with the value you want');
+  } else {
+    reject('with the error you want');
+  }
+}
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>A simple example</h2>
+        <p>Create a function that returns a Promise</p>
+        <pre>
+function doSomething(x) {
+  return new Promise(function(resolve, reject) {
+    if (x !== 'bad') {
+      setTimeout(function() { resolve(x); }, 1000);
+    } else {
+      setTimeout(function() { reject(x); }, 1000);
+    }
+  });
+}
+        </pre>
+        <p>The value of <code>resolve</code> gets passed to <code>.then()</code></p>
+        <p><code>.then()</code> returns a new promise, resolving to the return value of the passed function</p>
+        <pre>
+doSomething('good')
+  .then(function(x) {
+    console.log(x);
+  });
+        </pre>
+
+        <p>How to handle rejection</p>
+        <pre>
+doSomething('bad')
+  .then(function(x) {
+    console.log(x);
+  }, function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+
+        <p>This is equivalent to using catch</p>
+        <pre>
+doSomething('bad')
+  .then(function(x) {
+    console.log(x);
+  })
+  .catch(function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>Chaining, part 1</h2>
+        <pre>
+doSomething('good')
+  .then(doSomething('bad'))
+  .then(doSomething('fun'))
+  .then(function(x) {
+    console.log(x);
+  })
+  .catch(function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>Chaining, part 2 - the right way. Return the promise.</h2>
+        <pre>
+doSomething('good')
+  .then(function() {
+    return doSomething('bad');
+  })
+  .then(function() {
+    return doSomething('fun');
+  })
+  .then(function(x) {
+    console.log(x);
+  })
+  .catch(function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>Promisifying XMLHttpRequest</h2>
+        <p>Adapted from http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest</p>
+        <pre>
+function get(url) {
+  // Return a new promise.
+  return new Promise(function(resolve, reject) {
+    // Do the usual XHR stuff
+    var req = new XMLHttpRequest();
+    req.open('GET', url);
+
+    req.onload = function() {
+      // This is called even on 404 etc
+      // so check the status
+      if (req.status === 200) {
+        // Resolve the promise with the response text
+        resolve(req.response);
+      }
+      else {
+        // Otherwise reject with the status text
+        // which will hopefully be a meaningful error
+        reject(new Error(req.statusText));
+      }
+    };
+
+    // Handle network errors
+    req.onerror = function() {
+      reject(new Error('Network Error'));
+    };
+
+    // Make the request
+    req.send();
+  });
+}
+        </pre>
+      </div>
+
+      <div class="row">
+        <p>Example with real requests</p>
+        <pre>
+get('data/step1.json')
+  .then(function() {
+    return get('data/step2.json');
+  })
+  .then(function() {
+    return get('data/step3.json');
+  })
+  .then(function(response) {
+    console.log(response);
+  }).catch(function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <p>Error handling</p>
+        <pre>
+get('data/step1.json')
+  .then(function() {
+    return get('data/step2.json');
+  })
+  .then(function() {
+    return get('data/doesnt-exist.json');
+  })
+  .then(function() {
+    return get('data/step3.json');
+  })
+  .then(function(response) {
+    console.log(response);
+  }).catch(function(error) {
+    console.log(':(', error);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>Promise.all</h2>
+        <p>Pass an array of promises, get back an array of responses.</p>
+        <pre>
+Promise
+  .all([
+    get('data/step1.json'),
+    get('data/step2.json'),
+    get('data/step3.json')
+  ])
+  .then(function(arrayOfResults) {
+    console.log(arrayOfResults);
+  });
+        </pre>
+      </div>
+
+      <div class="row">
+        <h2>Promise.race</h2>
+        <p>Returns the value of the first promise to resolve or reject.</p>
+        <pre>
+Promise
+  .race([
+    get('data/step1.json'),
+    get('data/step2.json'),
+    get('data/step3.json')
+  ])
+  .then(function(first) {
+    console.log(first);
+  });
+        </pre>
+      </div>
+
+    </div>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/google-code-prettify/src/run_prettify.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/main.js -->
+    <script src="scripts/main.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

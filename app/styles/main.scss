@@ -1,0 +1,39 @@
+// bower:scss
+@import "bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+$gray: #ccc;
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid $gray;
+}
+
+.jumbotron {
+  text-align: center;
+  border: 1px solid $gray;
+}
+
+.row {
+  margin: 0 0 40px 0;
+  border-bottom: 1px solid $gray;
+  padding-bottom: 60px;
+
+  pre.prettyprint {
+    padding: 15px;
+    border-radius: 0;
+  }
+}
