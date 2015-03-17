@@ -6,7 +6,8 @@ Examples and helpful hints for using native promises
 
 Install dependencies
 ```
-npm install -g gulp bower
+npm install
+bower install
 ```
 
 Start the server
