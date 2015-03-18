@@ -45,8 +45,8 @@ Promise { then: function, catch: function }
       </div>
 
       <div class="row">
-        <h2>Promise usage in plain english</h2>
-        <p>A promise always takes a function with two arguments - the first for resolve, the second for reject</p>
+        <h2>Promise usage in plain English</h2>
+        <p>A promise always takes a function with two arguments&mdash;the first for resolve, the second for reject.</p>
         <pre>
 Promise(function(resolve, reject) {
   if ('your condition is met') {
@@ -60,7 +60,7 @@ Promise(function(resolve, reject) {
 
       <div class="row">
         <h2>A simple example</h2>
-        <p>Create a function that returns a Promise</p>
+        <p>Create a function that returns a Promise.</p>
         <pre>
 function doSomething(x) {
   return new Promise(function(resolve, reject) {
@@ -72,8 +72,8 @@ function doSomething(x) {
   });
 }
         </pre>
-        <p>The value of <code>resolve</code> gets passed to <code>.then()</code></p>
-        <p><code>.then()</code> returns a new promise, resolving to the return value of the passed function</p>
+        <p>The value of <code>resolve</code> gets passed to <code>.then()</code>.</p>
+        <p><code>.then()</code> returns a new promise, resolving to the return value of the passed function.</p>
         <pre>
 doSomething('good')
   .then(function(x) {
@@ -81,7 +81,7 @@ doSomething('good')
   });
         </pre>
 
-        <p>How to handle rejection</p>
+        <p>How to handle rejection.</p>
         <pre>
 doSomething('bad')
   .then(function(x) {
@@ -91,7 +91,7 @@ doSomething('bad')
   });
         </pre>
 
-        <p>This is equivalent to using catch</p>
+        <p>This is equivalent to using catch.</p>
         <pre>
 doSomething('bad')
   .then(function(x) {
@@ -119,7 +119,7 @@ doSomething('good')
       </div>
 
       <div class="row">
-        <h2>Chaining, part 2 - the right way. Return the promise.</h2>
+        <h2>Chaining, part 2&mdash;the right way. Return the promise</h2>
         <pre>
 doSomething('good')
   .then(function() {
@@ -139,7 +139,7 @@ doSomething('good')
 
       <div class="row">
         <h2>Promisifying XMLHttpRequest</h2>
-        <p>Adapted from http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest</p>
+        <p>Adapted from <a href="http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest">http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest</a>.</p>
         <pre>
 function get(url) {
   // Return a new promise.
@@ -172,10 +172,8 @@ function get(url) {
   });
 }
         </pre>
-      </div>
 
-      <div class="row">
-        <p>Example with real requests</p>
+        <p>Example with real requests.</p>
         <pre>
 get('data/step1.json')
   .then(function() {
@@ -190,10 +188,8 @@ get('data/step1.json')
     console.log(':(', error);
   });
         </pre>
-      </div>
 
-      <div class="row">
-        <p>Error handling</p>
+        <p>Error handling.</p>
         <pre>
 get('data/step1.json')
   .then(function() {
